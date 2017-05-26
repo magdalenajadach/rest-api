@@ -1,7 +1,9 @@
 {
-	"name": "node-sqlite",
-	"version": "1.0.1",
-	"dependencies": {
-		"sqlite": "~2.2.3"
-	}
+  "name": "node-sqlite",
+  "version": "1.0.1",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "sqlite": "~2.2.3"
+  }
 }
