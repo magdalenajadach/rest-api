@@ -1,19 +1,45 @@
 var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('raspberry.db');
-var check;
-db.serialize(function() {
 
-  db.run("CREATE TABLE if not exists user_main (username TEXT NOT NULL, email TEXT NOT NULL, password TEXT NOT NULL)");
-  var stmt = db.prepare("INSERT INTO user_main VALUES (?, ?, ?)");
-  for (var i = 0; i < 5; i++) {
-      stmt.run("User " + i);
-  }
-  stmt.finalize();
+var express = require('express');
+var app = express();
 
-  db.each("SELECT rowid AS id, username FROM user_main", function(err, row) {
-      console.log(row.id + ": " + row.username);
+var bodyParser = require('body-parser');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true })); 
+
+
+app.get('/api/v1/users/', function(req, res) {
+  console.log('landed in users\n')
+  db.all("SELECT * FROM user_main", function(err, users) {
+      res.json({users});
   });
+})
 
-});
+app.get('/api/v1/users/:userName', function(req, res) {
+  console.log("SELECT * from user_main where userName = '" + req.params.userName + "'")
+  db.all("SELECT * from user_main where userName = '" + req.params.userName + "'", function(err, users){
+    res.json({users})
+  });
+  res.send('Single user selected\n')
+})
 
-db.close();
+app.post('/api/v1/users/', function(req, res) {
+  var stmt = db.prepare("INSERT into user_main VALUES (?, ?, ?)", req.body.username, req.body.email, req.body.password);
+  stmt.run();
+  stmt.finalize();
+  res.send('User added\n')
+})
+
+
+app.delete('/api/v1/users/', function(req, res) {
+  console.log(req.body);
+  var stmt = db.prepare("DELETE from user_main where username = ?", req.body.username);
+  stmt.run();
+  stmt.finalize();
+  res.send('landed in users delete\n')
+})
+
+app.listen(8000, function() { 
+  console.log('Listening on port 8000\n')
+})
