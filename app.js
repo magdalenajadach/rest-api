@@ -10,12 +10,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 var check;
-db.run("CREATE TABLE if not exists users (username TEXT, email TEXT, password TEXT)");
+
+db.serialize(function() {
+  db.run("CREATE TABLE if not exists users (username TEXT, email TEXT, password TEXT)");
+})
 
 app.get('/api/v1/users/', function(req, res) {
   console.log('landed in users\n')
   db.all("SELECT * FROM users", function(err, users) {
-      res.json({users});
+    res.json({users});
   });
 })
 
@@ -45,4 +48,5 @@ app.delete('/api/v1/users/', function(req, res) {
 app.listen(8000, function() { 
   console.log('Listening on port 8000\n')
 })
+
 
