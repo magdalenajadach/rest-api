@@ -10,25 +10,25 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 var check;
-db.run("CREATE TABLE if not exists users_main (username TEXT, email TEXT, password TEXT)");
+db.run("CREATE TABLE if not exists users (username TEXT, email TEXT, password TEXT)");
 
 app.get('/api/v1/users/', function(req, res) {
   console.log('landed in users\n')
-  db.all("SELECT * FROM users_main", function(err, users) {
+  db.all("SELECT * FROM users", function(err, users) {
       res.json({users});
   });
 })
 
 app.get('/api/v1/users/:userName', function(req, res) {
-  console.log("SELECT * from users_main where userName = '" + req.params.userName + "'")
-  db.all("SELECT * from users_main where userName = '" + req.params.userName + "'", function(err, users){
+  console.log("SELECT * from users where userName = '" + req.params.userName + "'")
+  db.all("SELECT * from users where userName = '" + req.params.userName + "'", function(err, users){
     res.json({users})
   });
   res.send('Single user selected\n')
 })
 
 app.post('/api/v1/users/', function(req, res) {
-  var stmt = db.prepare("INSERT into users_main VALUES (?, ?, ?)", req.body.username, req.body.email, req.body.password);
+  var stmt = db.prepare("INSERT into users VALUES (?, ?, ?)", req.body.username, req.body.email, req.body.password);
   stmt.run();
   stmt.finalize();
   res.send('User added\n')
@@ -36,7 +36,7 @@ app.post('/api/v1/users/', function(req, res) {
 
 app.delete('/api/v1/users/', function(req, res) {
   console.log(req.body);
-  var stmt = db.prepare("DELETE from users_main where username = ?", req.body.username);
+  var stmt = db.prepare("DELETE from users where username = ?", req.body.username);
   stmt.run();
   stmt.finalize();
   res.send('landed in users delete\n')
