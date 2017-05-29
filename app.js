@@ -4,6 +4,8 @@ var db = new sqlite3.Database('raspberry.db');
 var express = require('express');
 var app = express();
 
+var bcrypt = require('bcrypt');
+
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); 
@@ -29,7 +31,8 @@ app.get('/api/v1/users/:userName', function(req, res) {
 })
 
 app.post('/api/v1/users/', function(req, res) {
-  var stmt = db.prepare("INSERT into users VALUES (?, ?, ?)", req.body.username, req.body.email, req.body.password);
+  var hash = bcrypt.hashSync(req.body.password, 10);
+  var stmt = db.prepare("INSERT into users VALUES (?, ?, ?)", req.body.username, req.body.email, hash);
   stmt.run();
   stmt.finalize();
   res.status(200).send('Success - user added');
