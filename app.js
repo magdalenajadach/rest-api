@@ -22,6 +22,15 @@ let apiKey = 'iloveberries';
 
 let check;
 
+// Functions
+function getCounts(username, callback) {
+  db.all('SELECT * FROM users WHERE username = ?', username, (err, users) => { 
+    if(err){
+      callback(err)
+    }
+    callback(null, users.length)
+  })
+}
 
 // Create the DB structures
 db.run("CREATE TABLE if not exists users (username TEXT, email TEXT, password TEXT)");
@@ -37,7 +46,7 @@ app.get('/api/v1/users/', function(req, res) {
 
 // List particular user endpoint
 app.get('/api/v1/users/:username', function(req, res) {
-  db.all("SELECT * from users where username = ?", req.params.username, function(err, users){
+  db.all("SELECT * from users where username = ? LIMIT 1", req.params.username, function(err, users){
     return res.status(200).json({ status: 'success', users })
   });
 })
@@ -69,12 +78,19 @@ app.post('/api/v1/users/', function(req, res) {
   if(req.validationErrors()) {
     return res.status(400).send({ 'status': 'error', 'message': 'Request validation errors: ' + util.inspect(req.validationErrors())});
   }
-  // If there are no errors, proceed adding user and generate password hash
-  let hash = bcrypt.hashSync(req.body.password, 10);
-  let stmt = db.prepare("INSERT into users VALUES (?, ?, ?)", req.body.username, req.body.email, hash);
-  stmt.run();
-  stmt.finalize();
-  return res.status(200).send({ status: 'success', message: 'User added successfully' });
+
+  // Check if provided username exists in the database and stop it it does
+  getCounts(req.body.username, function(err, count) {
+    if(count > 0){
+      return res.status(200).send({ status: 'error', message: 'User already exists' });
+    }
+    // If there are no errors, proceed adding user and generate password hash
+    let hash = bcrypt.hashSync(req.body.password, 10);
+    let stmt = db.prepare("INSERT into users VALUES (?, ?, ?)", req.body.username, req.body.email, hash);
+    stmt.run();
+    stmt.finalize();
+    return res.status(200).send({ status: 'success', message: 'User added successfully' });
+  })
 })
 
 
