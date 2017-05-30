@@ -21,13 +21,13 @@ var check;
 
 app.get('/api/v1/users/', function(req, res) {
   console.log('landed in users\n')
-  db.all("SELECT username FROM users", function(err, users) {
+  db.all("SELECT * FROM users", function(err, users) {
     return res.status(200).json({users});
   });
 })
 
 app.get('/api/v1/users/:userName', function(req, res) {
-  console.log("SELECT username from users where userName = '" + req.params.userName + "'")
+  console.log("SELECT * from users where userName = '" + req.params.userName + "'")
   db.all("SELECT * from users where userName = '" + req.params.userName + "'", function(err, users){
     return res.status(200).json({users})
   });
