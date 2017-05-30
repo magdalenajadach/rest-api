@@ -1,14 +1,19 @@
 var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('raspberry.db');
 
+var util = require('util');
 var express = require('express');
+
 var app = express();
 
 var bcrypt = require('bcrypt');
 
 var bodyParser = require('body-parser');
+var expressValidator = require('express-validator');
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); 
+app.use(expressValidator());
 
 var apiUser = 'root';
 var apiKey = 'iloveberries';
@@ -34,14 +39,41 @@ app.get('/api/v1/users/:userName', function(req, res) {
 })
 
 app.post('/api/v1/users/', function(req, res) {
-  if (req.body.username === undefined || req.body.email === undefined || req.body.password === undefined) {
-    return res.json({ error: 'Missing data. Username, email and password are required'});
+  req.checkBody({
+   'email': {
+      notEmpty: true,
+      isEmail: {
+        errorMessage: 'Enter a valid email address'
+      },
+      errorMessage: 'Email field is mandatory'
+    },
+    'password': {
+      notEmpty: true,
+      isLength: {
+        options: [{ min: 6 }],
+        errorMessage: 'Must be between 6 and 15 characters long'
+      },
+      errorMessage: 'Password field is mandatory'
+    },
+    'username': { //
+      notEmpty: true,
+      isLength: {
+        options: [{ min: 5}],
+        errorMessage: 'Must be between 5 and 15 characters long' 
+      },
+      errorMessage: 'Username field is mandatory'
+    }
+  });
+
+  if(req.validationErrors()) {
+    return res.status(400).send('There have been validation errors: ' + util.inspect(req.validationErrors()));
+  } else {
+      var hash = bcrypt.hashSync(req.body.password, 10);
+    var stmt = db.prepare("INSERT into users VALUES (?, ?, ?)", req.body.username, req.body.email, hash);
+    stmt.run();
+    stmt.finalize();
+    return res.status(200).send('Success - user added'); //update it to return json
   }
-  var hash = bcrypt.hashSync(req.body.password, 10);
-  var stmt = db.prepare("INSERT into users VALUES (?, ?, ?)", req.body.username, req.body.email, hash);
-  stmt.run();
-  stmt.finalize();
-  return res.status(200).send('Success - user added'); //update it to return json
 })
 
 app.delete('/api/v1/users/:userName', function(req, res) {
