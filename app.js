@@ -27,8 +27,8 @@ app.get('/api/v1/users/', function(req, res) {
   });
 })
 
-app.get('/api/v1/users/:userName', function(req, res) {
-  db.all("SELECT * from users where userName = '" + req.params.userName + "'", function(err, users){
+app.get('/api/v1/users/:username', function(req, res) {
+  db.all("SELECT * from users where username = '" + req.params.username + "'", function(err, users){
     return res.status(200).json({ status: 'success', users })
   });
 })
@@ -71,7 +71,7 @@ app.post('/api/v1/users/', function(req, res) {
   }
 })
 
-app.delete('/api/v1/users/:userName', function(req, res) {
+app.delete('/api/v1/users/:username', function(req, res) {
   if (!req.headers.authorization) {
     return res.json({ status: 'error', message: 'You are not authorized to perform the requested operation' }); 
   }
@@ -83,7 +83,7 @@ app.delete('/api/v1/users/:userName', function(req, res) {
     return res.json({ status: 'error', message: 'The username or password you have entered is invalid' });
   }
 
-  let stmt = db.prepare("DELETE from users where username = '" + req.params.userName + "'")
+  let stmt = db.prepare("DELETE from users where username = '" + req.params.username + "'")
   stmt.run();
   stmt.finalize();
   return res.status(200).send({ status: 'success', message: 'User removed successfully' })
