@@ -85,7 +85,7 @@ app.delete('/api/v1/users/:userName', function(req, res) {
   let stmt = db.prepare("DELETE from users where username = '" + req.params.userName + "'")
   stmt.run();
   stmt.finalize();
-  return res.status(200).send({ status: 'success', message: 'User added successfully' })
+  return res.status(200).send({ status: 'success', message: 'User removed successfully' })
 })
 
 app.listen(8000, function() { 
