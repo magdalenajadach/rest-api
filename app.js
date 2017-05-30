@@ -1,11 +1,11 @@
+let util = require('util');
+
 let sqlite3 = require('sqlite3').verbose();
 let db = new sqlite3.Database('raspberry.db');
 
-let util = require('util');
 let express = require('express');
 let app = express();
 
-let bcrypt = require('bcrypt');
 let bodyParser = require('body-parser');
 let expressValidator = require('express-validator');
 
@@ -13,6 +13,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); 
 app.use(expressValidator());
 
+let bcrypt = require('bcrypt');
 let apiUser = 'root';
 let apiKey = 'iloveberries';
 
@@ -22,13 +23,13 @@ db.run("CREATE TABLE if not exists users (username TEXT, email TEXT, password TE
 
 app.get('/api/v1/users/', function(req, res) {
   db.all("SELECT * FROM users", function(err, users) {
-    return res.status(200).json({ users });
+    return res.status(200).json({ status: 'success', users });
   });
 })
 
 app.get('/api/v1/users/:userName', function(req, res) {
   db.all("SELECT * from users where userName = '" + req.params.userName + "'", function(err, users){
-    return res.status(200).json({ users })
+    return res.status(200).json({ status: 'success', users })
   });
 })
 
