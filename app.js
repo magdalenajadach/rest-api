@@ -1,22 +1,22 @@
-var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database('raspberry.db');
+let sqlite3 = require('sqlite3').verbose();
+let db = new sqlite3.Database('raspberry.db');
 
-var util = require('util');
-var express = require('express');
-var app = express();
+let util = require('util');
+let express = require('express');
+let app = express();
 
-var bcrypt = require('bcrypt');
-var bodyParser = require('body-parser');
-var expressValidator = require('express-validator');
+let bcrypt = require('bcrypt');
+let bodyParser = require('body-parser');
+let expressValidator = require('express-validator');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); 
 app.use(expressValidator());
 
-var apiUser = 'root';
-var apiKey = 'iloveberries';
+let apiUser = 'root';
+let apiKey = 'iloveberries';
 
-var check;
+let check;
 
 db.run("CREATE TABLE if not exists users (username TEXT, email TEXT, password TEXT)");
 
@@ -62,8 +62,8 @@ app.post('/api/v1/users/', function(req, res) {
   if(req.validationErrors()) {
     return res.status(400).send('There have been validation errors: ' + util.inspect(req.validationErrors()));
   } else {
-      var hash = bcrypt.hashSync(req.body.password, 10);
-    var stmt = db.prepare("INSERT into users VALUES (?, ?, ?)", req.body.username, req.body.email, hash);
+      let hash = bcrypt.hashSync(req.body.password, 10);
+    let stmt = db.prepare("INSERT into users VALUES (?, ?, ?)", req.body.username, req.body.email, hash);
     stmt.run();
     stmt.finalize();
     return res.status(200).send({ status: 'success', message: 'User added successfully' });
@@ -75,14 +75,14 @@ app.delete('/api/v1/users/:userName', function(req, res) {
     return res.json({ status: 'error', message: 'You are not authorized to perform the requested operation' }); 
   }
 
-  var encoded = req.headers.authorization.split(' ')[1];
-  var decoded = new Buffer(encoded, 'base64').toString('utf8');
+  let encoded = req.headers.authorization.split(' ')[1];
+  let decoded = new Buffer(encoded, 'base64').toString('utf8');
 
   if (decoded.split(':')[0] != apiUser || decoded.split(':')[1] != apiKey) {
     return res.json({ status: 'error', message: 'The username or password you have entered is invalid' });
   }
 
-  var stmt = db.prepare("DELETE from users where username = '" + req.params.userName + "'")
+  let stmt = db.prepare("DELETE from users where username = '" + req.params.userName + "'")
   stmt.run();
   stmt.finalize();
   return res.status(200).send({ status: 'success', message: 'User added successfully' })
