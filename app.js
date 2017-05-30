@@ -20,19 +20,15 @@ var apiKey = 'iloveberries';
 
 var check;
 
-//db.serialize(function() {
-  db.run("CREATE TABLE if not exists users (username TEXT, email TEXT, password TEXT)");
-//})
+db.run("CREATE TABLE if not exists users (username TEXT, email TEXT, password TEXT)");
 
 app.get('/api/v1/users/', function(req, res) {
-  console.log('landed in users\n')
   db.all("SELECT * FROM users", function(err, users) {
     return res.status(200).json({users});
   });
 })
 
 app.get('/api/v1/users/:userName', function(req, res) {
-  console.log("SELECT * from users where userName = '" + req.params.userName + "'")
   db.all("SELECT * from users where userName = '" + req.params.userName + "'", function(err, users){
     return res.status(200).json({users})
   });
@@ -77,7 +73,6 @@ app.post('/api/v1/users/', function(req, res) {
 })
 
 app.delete('/api/v1/users/:userName', function(req, res) {
-  console.log(req.body);
   if (!req.headers.authorization) {
     return res.json({ error: 'No credentials sent!' }); 
   }
