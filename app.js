@@ -45,7 +45,7 @@ app.post('/api/v1/users/', function(req, res) {
       notEmpty: true,
       isLength: {
         options: [{ min: 6 }],
-        errorMessage: 'Must be between 6 and 15 characters long'
+        errorMessage: 'Password must be at least 6 characters long'
       },
       errorMessage: 'Password field is mandatory'
     },
@@ -53,7 +53,7 @@ app.post('/api/v1/users/', function(req, res) {
       notEmpty: true,
       isLength: {
         options: [{ min: 5}],
-        errorMessage: 'Must be between 5 and 15 characters long' 
+        errorMessage: 'Username must be at least 5 characters long' 
       },
       errorMessage: 'Username field is mandatory'
     }
