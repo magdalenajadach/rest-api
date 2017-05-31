@@ -35,9 +35,9 @@ To deploy and test this solution one needs a machine with the following software
 - Curl
 
 # Usage
-**Clone the repository into proper location**
+**Clone the repository into proper location** 
 ```git clone https://github.com/magdalenajadach/rest-api.git```
-**Launch the the Docker**
+**Launch the the Docker** 
 ```cd ~/rest-api```
 ```docker build -t api . ```
 ```docker run -p 8000:8000 api```
@@ -59,7 +59,7 @@ To deploy and test this solution one needs a machine with the following software
 - List all containers
 ```docker ps```
 - Stop the container
-```docker stop [container id]
+```docker stop [container id]```
 - Remove container
 ```docker rm```
 - Docker help
