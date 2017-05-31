@@ -68,11 +68,11 @@ To deploy and test this solution one needs a machine with the following software
 # Epilogue
 
 # Additional resources
-[NodeJs](https://nodejs.org/en/docs/)
-[NPM](https://www.npmjs.com)
-[ExpressJS](https://expressjs.com)
-[SQLite](https://sqlite.org/docs.html)
-[Curl](https://curl.haxx.se/docs/install.html)
-[Curl commandline](https://gist.github.com/subfuzion/08c5d85437d5d4f00e58)
-[Docker docs](https://docs.docker.com/engine/reference/builder/#label)
-[Docker commandline](https://docs.docker.com/engine/reference/commandline/cli/)
+-[NodeJs](https://nodejs.org/en/docs/)
+-[NPM](https://www.npmjs.com)
+-[ExpressJS](https://expressjs.com)
+-[SQLite](https://sqlite.org/docs.html)
+-[Curl](https://curl.haxx.se/docs/install.html)
+-[Curl commandline](https://gist.github.com/subfuzion/08c5d85437d5d4f00e58)
+-[Docker docs](https://docs.docker.com/engine/reference/builder/#label)
+-[Docker commandline](https://docs.docker.com/engine/reference/commandline/cli/)
