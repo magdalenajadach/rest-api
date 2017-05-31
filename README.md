@@ -1,5 +1,5 @@
 # Rest-api
-## Technical exercise to design and build a JSON REST API
+## Technical exercise to design and build a REST API
 
 This repository contains a technical demo for a given task of:
 
