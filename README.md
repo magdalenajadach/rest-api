@@ -1,5 +1,5 @@
 # Rest-api
-** Technical exercise to design and build a simple REST API**
+**Technical exercise to design and build a simple REST API**
 
 This repository contains a technical demo for a given task of:
 
@@ -42,7 +42,7 @@ $ cd ~/rest-api
 $ docker build -t api .
 ```
 
-Run the application in Docker container with localhost port 8000 forwarded to container port 8000. Your output when running should look similar t:
+Run the application in Docker container with localhost port 8000 forwarded to container port 8000. Your output when running should look similar to:
 
 ```sh
 $ docker run -p 8000:8000 api
@@ -78,7 +78,18 @@ $ curl -H "Content-Type: application/json" -X POST -d '{"username":"strawberry",
 $ curl -H "Content-Type: application/json" -X DELETE  http://localhost:8000/api/v1/users/strawberry --user "root:iloveberries"
 ```
 
+### Test validations
+The API is using few simple validations of user provided data, so feel free and try to use it with some crazy/broken requests that should not be accepted (missing username, email, too short passwords and so on) :)
+
+```sh
+$ curl -H "Content-Type: application/json"  -X DELETE  http://localhost:8000/api/v1/users/strawberry
+$ curl -H "Content-Type: application/json" -X POST -d '{"username":"strawberry", "password":"a-very-strong-password"}' http://localhost:8000/api/v1/users
+$ curl -H "Content-Type: application/json" -X POST -d '{"username":"strawberry","email": "strawberry@pi.co.uk", "password":"weak"}' http://localhost:8000/api/v1/users
+```
+
 # Epilogue
+
+This is a very simple demo - it is neither complete nor polished or secure as it could be. We could (and we should!) enforce SSL connectivity for additional security, we could somehow hide/encrypt the API secret key and user, we could add more user input validation, we could add automatic unit and functional testing, but it was my first ever attempt to write an REST API from scratch, using technologies I havent used before (NodeJS, Express and so on) so I've had a lot to research to and learn to, which was fun but took some time. Enjoy and have fun breaking it :)
 
 # Additional resources
 - [NodeJs](https://nodejs.org/en/docs/)
