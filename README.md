@@ -1,69 +1,82 @@
 # Rest-api
-## Technical exercise to design and build a REST API
+** Technical exercise to design and build a simple REST API**
 
 This repository contains a technical demo for a given task of:
 
 **Technology requirements**
-- Node (can make use of of a web framework such Express)
-- Flat file database SQLite
-
-**User model with following attributes**
-- username
-- email
-- password
-
-**API which implements**
-- creation
-- reading
-- deletion
-
-**Hashing schema**
-- passwords should be stored securely using a hashing schema
-
-**Secretkey**
-- secretkey should be provided for deletion of a user
+- Build simple JSON REST API
+- Use Ruby, NodeJS or PHP (frameworks allowed)
+- Use some persisten database (SQLite allowed)
+- Work on user model with username, email and password attributes
+- Provide endpoints for reading, creating and deleting users
+- Require some form ot authentication for user deletion
+- Provide some form of password hasing/security
+- Provide some form of documentation (either in code comments, or a README)
 
 This repository contains the complete solution that was build keeping the simplicity requirement as main priority. It does not aim to be-all-end-all solution for this problem.
 
 # Requirements
-To deploy and test this solution one needs a machine with the following software installed (instructions for Mac users):
-- Docker for Mac 17.3
-- Mac must be a 2010 or newer model, with Intel’s hardware support for memory management unit (MMU) virtualization
-- OS X El Capitan 10.11
-- At least 4GB of RAM
-- VirtualBox prior to version 4.3.30 must NOT be installed (it is incompatible with Docker for Mac). If you have a newer version of VirtualBox installed, it’s fine
+To deploy and test this application one needs a system with the following software installed:
+- Docker
 - Curl
 
-# Usage
-**Clone the repository into proper location** 
-```git clone https://github.com/magdalenajadach/rest-api.git```
-**Launch the the Docker** 
-```cd ~/rest-api```
-```docker build -t api . ```
-```docker run -p 8000:8000 api```
+The aplication itself requires following software installed (or dockerized):
+- NodeJS
+	- Express library for NodeJS
+	- Express-validator library for NodeJS
+	- Body-parser library for NodeJS
+	- Bcrypt library for NodeJS
+- SQLite 3
 
-**Commands to perform different operations**
-- List all users 
-```curl "localhost:8000/api/v1/users"```
+# Deployment
+Clone the repository into proper location:
 
-- List single user 
-```curl "localhost:8000/api/v1/users/{username}"```
+```sh
+$ git clone https://github.com/magdalenajadach/rest-api.git
+```
 
-- Add new user
-```curl -H "Content-Type: application/json" -X POST -d '{"username":"berry","email": "berry@pi.co.uk", "password":"strong-password"}' http://localhost:8000/api/v1/users```
+Build the Docker image with the application code and required software installed: 
 
-- Delete user
-```curl -H "Content-Type: application/json"  -X DELETE  http://localhost:8000/api/v1/users/{username} --user "root:iloveberries"```
+```sh
+$ cd ~/rest-api
+$ docker build -t api .
+```
 
-**Basic Docker commands to play with containers**
-- List all containers
-```docker ps```
-- Stop the container
-```docker stop [container id]```
-- Remove container
-```docker rm```
-- Docker help
-```docker --help```
+Run the application in Docker container with localhost port 8000 forwarded to container port 8000. Your output when running should look similar t:
+
+```sh
+$ docker run -p 8000:8000 api
+Listening on port 8000
+```
+
+That's it! The application should now be running and you should be able to access it via http://localhost:8000/api/v1/users url.
+
+# Usage and testing
+
+You can use the API just as you would use any other API, that is by writing some code talking to it, using web browser or by using commandline CURL tool. Examples below are for the CURL.
+
+### List all users
+
+```sh
+$ curl "localhost:8000/api/v1/users"
+```
+
+### List single particular user ('strawberry' is a username in our case)
+
+```sh
+$ curl "localhost:8000/api/v1/users/strawberry"
+```
+
+### Add new user
+
+```sh
+$ curl -H "Content-Type: application/json" -X POST -d '{"username":"strawberry","email": "strawberry@pi.co.uk", "password":"a-very-strong-password"}' http://localhost:8000/api/v1/users
+```
+
+### Delete user
+```sh
+$ curl -H "Content-Type: application/json" -X DELETE  http://localhost:8000/api/v1/users/strawberry --user "root:iloveberries"
+```
 
 # Epilogue
 
