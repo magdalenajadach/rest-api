@@ -82,7 +82,7 @@ app.post('/api/v1/users/', function(req, res) {
   // Check if provided username exists in the database and stop it it does
   getCounts(req.body.username, function(err, count) {
     if(count > 0){
-      return res.status(200).send({ status: 'error', message: 'User already exists' });
+      return res.status(400).send({ status: 'error', message: 'User already exists' });
     }
     // If there are no errors, proceed adding user and generate password hash
     let hash = bcrypt.hashSync(req.body.password, 10);
